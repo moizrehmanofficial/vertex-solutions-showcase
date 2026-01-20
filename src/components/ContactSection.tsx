@@ -24,7 +24,7 @@ const contactInfo = [
   {
     icon: Phone,
     title: "Phone",
-    details: ["+91 XXXXX XXXXX", "+91 XXXXX XXXXX"],
+    details: ["+92 XXXXX XXXXX", "+92 XXXXX XXXXX"],
   },
   {
     icon: Mail,
@@ -88,9 +88,9 @@ const ContactSection = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -103,7 +103,7 @@ const ContactSection = () => {
       setIsSubmitting(true);
 
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       toast({
         title: "Message Sent Successfully!",
@@ -114,7 +114,7 @@ const ContactSection = () => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
-        error.errors.forEach(err => {
+        error.errors.forEach((err) => {
           if (err.path[0]) {
             fieldErrors[err.path[0].toString()] = err.message;
           }
@@ -130,7 +130,7 @@ const ContactSection = () => {
     <section id="contact" ref={sectionRef} className="section-padding bg-card relative overflow-hidden">
       {/* Animated Background Elements */}
       <motion.div
-        animate={{ 
+        animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
         }}
@@ -138,7 +138,7 @@ const ContactSection = () => {
         className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
       />
       <motion.div
-        animate={{ 
+        animate={{
           scale: [1.2, 1, 1.2],
           opacity: [0.3, 0.5, 0.3],
         }}
@@ -157,7 +157,7 @@ const ContactSection = () => {
           }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <motion.span 
+          <motion.span
             variants={{
               hidden: { opacity: 0, scale: 0.8 },
               visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
@@ -167,12 +167,10 @@ const ContactSection = () => {
             Contact Us
           </motion.span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
-            Let's Start a{" "}
-            <span className="text-gradient text-shadow-glow">Conversation</span>
+            Let's Start a <span className="text-gradient text-shadow-glow">Conversation</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Have a project in mind? We'd love to hear from you. Send us a message 
-            and we'll respond as soon as possible.
+            Have a project in mind? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
           </p>
         </motion.div>
 
@@ -193,8 +191,8 @@ const ContactSection = () => {
               >
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                
-                <motion.div 
+
+                <motion.div
                   whileHover={{ rotate: 10, scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300 }}
                   className="relative w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors"
@@ -206,7 +204,9 @@ const ContactSection = () => {
                     {item.title}
                   </h4>
                   {item.details.map((detail, idx) => (
-                    <p key={idx} className="text-muted-foreground text-sm">{detail}</p>
+                    <p key={idx} className="text-muted-foreground text-sm">
+                      {detail}
+                    </p>
                   ))}
                 </div>
               </motion.div>
@@ -223,8 +223,8 @@ const ContactSection = () => {
             }}
             className="lg:col-span-3"
           >
-            <form 
-              onSubmit={handleSubmit} 
+            <form
+              onSubmit={handleSubmit}
               className="p-8 rounded-2xl bg-background border border-border relative overflow-hidden"
             >
               <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -241,7 +241,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.name ? "border-destructive" : ""}`}
                   />
                   {errors.name && (
-                    <motion.p 
+                    <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="text-destructive text-sm mt-1"
@@ -264,7 +264,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.email ? "border-destructive" : ""}`}
                   />
                   {errors.email && (
-                    <motion.p 
+                    <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="text-destructive text-sm mt-1"
@@ -289,7 +289,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.phone ? "border-destructive" : ""}`}
                   />
                   {errors.phone && (
-                    <motion.p 
+                    <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="text-destructive text-sm mt-1"
@@ -311,7 +311,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.subject ? "border-destructive" : ""}`}
                   />
                   {errors.subject && (
-                    <motion.p 
+                    <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="text-destructive text-sm mt-1"
@@ -336,7 +336,7 @@ const ContactSection = () => {
                   className={`transition-all duration-300 focus:scale-[1.005] ${errors.message ? "border-destructive" : ""}`}
                 />
                 {errors.message && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-destructive text-sm mt-1"
@@ -346,16 +346,16 @@ const ContactSection = () => {
                 )}
               </div>
 
-              <Button 
-                type="submit" 
-                variant="hero" 
-                size="lg" 
-                className="w-full group relative overflow-hidden" 
+              <Button
+                type="submit"
+                variant="hero"
+                size="lg"
+                className="w-full group relative overflow-hidden"
                 disabled={isSubmitting}
               >
                 {/* Shimmer effect */}
                 <span className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                
+
                 {isSubmitting ? (
                   <span className="relative flex items-center">
                     <Loader2 className="mr-2 w-5 h-5 animate-spin" />
@@ -364,10 +364,7 @@ const ContactSection = () => {
                 ) : (
                   <span className="relative flex items-center">
                     Send Message
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
+                    <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                       <Send className="ml-2 w-5 h-5" />
                     </motion.div>
                   </span>
