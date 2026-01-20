@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { CheckCircle2, Target, Lightbulb, Handshake, ArrowUpRight } from "lucide-react";
 
 const features = [
@@ -51,8 +52,20 @@ const itemVariants = {
 };
 
 const AboutSection = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { margin: "-100px", amount: 0.2 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [isInView, controls]);
+
   return (
-    <section id="about" className="section-padding bg-card relative overflow-hidden">
+    <section id="about" ref={sectionRef} className="section-padding bg-card relative overflow-hidden">
       {/* Animated Background Pattern */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-0 left-0 w-full h-full" 
@@ -80,27 +93,26 @@ const AboutSection = () => {
           {/* Left Content */}
           <motion.div
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, margin: "-100px" }}
+            animate={controls}
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
             }}
           >
             <motion.span 
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.5 }}
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+              }}
               className="inline-block text-primary font-semibold text-sm uppercase tracking-wider px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
             >
               About Us
             </motion.span>
             <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.1 } },
+              }}
               className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-6 mb-6"
             >
               Building Business{" "}
@@ -108,10 +120,10 @@ const AboutSection = () => {
               Since Day One
             </motion.h2>
             <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2 } },
+              }}
               className="text-muted-foreground text-lg leading-relaxed mb-8"
             >
               <strong className="text-foreground">Vertex Solutions Private Limited</strong> is a premier business consulting firm 
@@ -121,9 +133,6 @@ const AboutSection = () => {
 
             <motion.div 
               variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false }}
               className="grid grid-cols-2 gap-4 mb-8"
             >
               {highlights.map((item, index) => (
@@ -149,10 +158,10 @@ const AboutSection = () => {
             {/* Learn more link */}
             <motion.a
               href="#services"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.5 } },
+              }}
               whileHover={{ x: 5 }}
               className="inline-flex items-center gap-2 text-primary font-semibold group"
             >
@@ -169,8 +178,7 @@ const AboutSection = () => {
           {/* Right Content - Feature Cards */}
           <motion.div
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, margin: "-100px" }}
+            animate={controls}
             variants={{
               hidden: { opacity: 0, x: 50 },
               visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.2 } },
@@ -180,12 +188,14 @@ const AboutSection = () => {
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30, x: 30 }}
-                whileInView={{ opacity: 1, y: 0, x: 0 }}
-                viewport={{ once: false }}
-                transition={{ 
-                  duration: 0.5, 
-                  delay: 0.3 + index * 0.15,
+                variants={{
+                  hidden: { opacity: 0, y: 30, x: 30 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    x: 0,
+                    transition: { duration: 0.5, delay: 0.3 + index * 0.15 }
+                  },
                 }}
                 whileHover={{ x: 10, scale: 1.02 }}
                 className="group p-6 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden"
