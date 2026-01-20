@@ -1,8 +1,7 @@
-import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion, animate } from "framer-motion";
+import { useEffect, useState } from "react";
 import { 
   Award, 
-  Clock, 
   HeadphonesIcon, 
   Shield, 
   TrendingUp, 
@@ -57,59 +56,58 @@ const reasons = [
   },
 ];
 
-const AnimatedCounter = ({ value, suffix, inView }: { value: number; suffix: string; inView: boolean }) => {
+const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) => {
   const [displayValue, setDisplayValue] = useState(0);
-
-  useEffect(() => {
-    if (inView) {
-      const controls = animate(0, value, {
-        duration: 2,
-        ease: "easeOut",
-        onUpdate: (latest) => setDisplayValue(Math.round(latest)),
-      });
-      return () => controls.stop();
-    }
-  }, [inView, value]);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   return (
-    <span className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
+    <motion.span 
+      className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground"
+      onViewportEnter={() => {
+        if (!hasAnimated) {
+          setHasAnimated(true);
+          const controls = animate(0, value, {
+            duration: 2,
+            ease: "easeOut",
+            onUpdate: (latest) => setDisplayValue(Math.round(latest)),
+          });
+          return () => controls.stop();
+        }
+      }}
+      viewport={{ once: true }}
+    >
       {displayValue}
       <span className="text-primary">{suffix}</span>
-    </span>
+    </motion.span>
   );
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+};
+
 const WhyChooseUsSection = () => {
-  const sectionRef = useRef(null);
-  const statsRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const statsInView = useInView(statsRef, { once: true, margin: "-50px" });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring" as const,
-        stiffness: 100,
-        damping: 15,
-      },
-    },
-  };
-
   return (
     <section id="why-choose-us" className="section-padding relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -120,17 +118,19 @@ const WhyChooseUsSection = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-border/5 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }} />
       </div>
 
-      <div className="container mx-auto relative z-10" ref={sectionRef}>
+      <div className="container mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <motion.span 
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
@@ -148,9 +148,9 @@ const WhyChooseUsSection = () => {
 
         {/* Animated Stats */}
         <motion.div
-          ref={statsRef}
           initial={{ opacity: 0, y: 40 }}
-          animate={statsInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-20"
         >
@@ -158,15 +158,14 @@ const WhyChooseUsSection = () => {
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
-              animate={statsInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 * index }}
+              whileHover={{ y: -5 }}
               className="relative group"
             >
               <div className="p-6 lg:p-8 rounded-2xl bg-card border border-border text-center hover:border-primary/50 transition-all duration-500 hover-lift">
-                {/* Pulse ring effect */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-primary/20 opacity-0 group-hover:opacity-100 group-hover:animate-pulse-ring" />
-                
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} inView={statsInView} />
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                 <p className="text-muted-foreground mt-2 text-sm lg:text-base">{stat.label}</p>
               </div>
             </motion.div>
@@ -177,7 +176,8 @@ const WhyChooseUsSection = () => {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {reasons.map((reason, index) => (
@@ -222,8 +222,9 @@ const WhyChooseUsSection = () => {
         {/* Trust Badge */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
           <div className="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-secondary/50 border border-border">

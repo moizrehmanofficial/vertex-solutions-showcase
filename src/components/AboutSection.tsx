@@ -1,5 +1,4 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { CheckCircle2, Target, Lightbulb, Handshake, ArrowUpRight } from "lucide-react";
 
 const features = [
@@ -27,55 +26,42 @@ const highlights = [
   "24/7 dedicated client support",
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+};
+
 const AboutSection = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 100,
-        damping: 15,
-      },
-    },
-  };
-
   return (
     <section id="about" className="section-padding bg-card relative overflow-hidden">
       {/* Animated Background Pattern */}
-      <motion.div 
-        animate={{
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute inset-0"
-      >
+      <div className="absolute inset-0 opacity-30">
         <div className="absolute top-0 left-0 w-full h-full" 
           style={{ 
             backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--border)) 1px, transparent 0)`,
             backgroundSize: '40px 40px'
           }} 
         />
-      </motion.div>
+      </div>
 
       {/* Floating elements */}
       <motion.div
@@ -89,17 +75,22 @@ const AboutSection = () => {
         className="absolute bottom-20 left-20 w-24 h-24 bg-primary/5 rounded-full blur-xl hidden lg:block"
       />
 
-      <div className="container mx-auto relative z-10" ref={ref}>
+      <div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, type: "spring" }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
+            }}
           >
             <motion.span 
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="inline-block text-primary font-semibold text-sm uppercase tracking-wider px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
             >
@@ -107,7 +98,8 @@ const AboutSection = () => {
             </motion.span>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-6 mb-6"
             >
@@ -117,7 +109,8 @@ const AboutSection = () => {
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-muted-foreground text-lg leading-relaxed mb-8"
             >
@@ -129,7 +122,8 @@ const AboutSection = () => {
             <motion.div 
               variants={containerVariants}
               initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+              whileInView="visible"
+              viewport={{ once: true }}
               className="grid grid-cols-2 gap-4 mb-8"
             >
               {highlights.map((item, index) => (
@@ -156,7 +150,8 @@ const AboutSection = () => {
             <motion.a
               href="#services"
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
               whileHover={{ x: 5 }}
               className="inline-flex items-center gap-2 text-primary font-semibold group"
@@ -173,21 +168,24 @@ const AboutSection = () => {
 
           {/* Right Content - Feature Cards */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0, x: 50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.2 } },
+            }}
             className="space-y-6"
           >
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30, x: 30 }}
-                animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
+                whileInView={{ opacity: 1, y: 0, x: 0 }}
+                viewport={{ once: true }}
                 transition={{ 
                   duration: 0.5, 
                   delay: 0.3 + index * 0.15,
-                  type: "spring",
-                  stiffness: 100,
                 }}
                 whileHover={{ x: 10, scale: 1.02 }}
                 className="group p-6 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden"
