@@ -189,26 +189,19 @@ const ServicesSection = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02, transition: { duration: 0.2 } }}
               className="group relative"
             >
-              <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 overflow-hidden">
+              <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 overflow-hidden hover:-translate-y-2 hover:scale-[1.02]">
                 {/* Gradient overlay on hover */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  className={`absolute inset-0 bg-gradient-to-br ${service.gradient} pointer-events-none`}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${service.gradient} pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                 />
 
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 {/* Icon */}
-                <motion.div 
-                  whileHover={{ rotate: 5, scale: 1.15 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6"
-                >
+                <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6 transition-transform duration-300 group-hover:rotate-[5deg] group-hover:scale-110">
                   <service.icon className="w-7 h-7 text-primary" />
                   
                   {/* Pulse ring */}
@@ -217,7 +210,7 @@ const ServicesSection = () => {
                     transition={{ duration: 2, repeat: Infinity }}
                     className="absolute inset-0 rounded-xl border border-primary/30"
                   />
-                </motion.div>
+                </div>
 
                 {/* Content */}
                 <h3 className="relative font-display text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
@@ -228,11 +221,8 @@ const ServicesSection = () => {
                 </p>
 
                 {/* Bottom accent with scale animation */}
-                <motion.div 
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent origin-left"
+                <div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
                 />
               </div>
             </motion.div>

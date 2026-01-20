@@ -139,15 +139,11 @@ const AboutSection = () => {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  whileHover={{ x: 5 }}
-                  className="flex items-center gap-3 group cursor-default"
+                  className="flex items-center gap-3 group cursor-default hover:translate-x-1 transition-transform duration-200"
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
+                  <div className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-[5deg]">
                     <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                  </motion.div>
+                  </div>
                   <span className="text-sm text-foreground group-hover:text-primary transition-colors">
                     {item}
                   </span>
@@ -197,18 +193,13 @@ const AboutSection = () => {
                     transition: { duration: 0.5, delay: 0.3 + index * 0.15 }
                   },
                 }}
-                whileHover={{ x: 10, scale: 1.02, transition: { duration: 0.2 } }}
-                className="group p-6 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden"
+                className="group p-6 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden hover:translate-x-2 hover:scale-[1.02]"
               >
                 {/* Shimmer overlay */}
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 
                 <div className="flex items-start gap-5 relative">
-                  <motion.div 
-                    whileHover={{ rotate: 10, scale: 1.1 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors relative"
-                  >
+                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-all duration-300 relative group-hover:rotate-[10deg] group-hover:scale-110">
                     <feature.icon className="w-7 h-7 text-primary" />
                     
                     {/* Pulse effect */}
@@ -217,7 +208,7 @@ const AboutSection = () => {
                       transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
                       className="absolute inset-0 rounded-xl border border-primary/40"
                     />
-                  </motion.div>
+                  </div>
                   <div>
                     <h3 className="font-display text-xl font-semibold mb-2 text-foreground group-hover:text-primary transition-colors">
                       {feature.title}
@@ -227,11 +218,8 @@ const AboutSection = () => {
                 </div>
 
                 {/* Bottom accent */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent origin-left"
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
                 />
               </motion.div>
             ))}
