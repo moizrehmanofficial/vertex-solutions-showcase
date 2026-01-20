@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { useInViewOnce } from "@/hooks/use-in-view-once";
 import { z } from "zod";
 
 const contactSchema = z.object({
@@ -64,6 +65,7 @@ const itemVariants = {
 
 const ContactSection = () => {
   const { toast } = useToast();
+  const { ref, hasBeenInView } = useInViewOnce<HTMLDivElement>({ margin: "-100px" });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -119,7 +121,7 @@ const ContactSection = () => {
     <section id="contact" className="section-padding bg-card relative overflow-hidden">
       {/* Animated Background Elements */}
       <motion.div
-        animate={{ 
+        animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
         }}
@@ -127,7 +129,7 @@ const ContactSection = () => {
         className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
       />
       <motion.div
-        animate={{ 
+        animate={{
           scale: [1.2, 1, 1.2],
           opacity: [0.3, 0.5, 0.3],
         }}
@@ -135,19 +137,17 @@ const ContactSection = () => {
         className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl"
       />
 
-      <div className="container mx-auto relative z-10">
+      <div ref={ref} className="container mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          animate={hasBeenInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            animate={hasBeenInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.5 }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
@@ -158,7 +158,7 @@ const ContactSection = () => {
             <span className="text-gradient text-shadow-glow">Conversation</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Have a project in mind? We'd love to hear from you. Send us a message 
+            Have a project in mind? We'd love to hear from you. Send us a message
             and we'll respond as soon as possible.
           </p>
         </motion.div>
@@ -168,8 +168,7 @@ const ContactSection = () => {
           <motion.div
             variants={containerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            animate={hasBeenInView ? "visible" : "hidden"}
             className="lg:col-span-2 space-y-6"
           >
             {contactInfo.map((item, index) => (
@@ -181,8 +180,8 @@ const ContactSection = () => {
               >
                 {/* Shimmer effect */}
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                
-                <motion.div 
+
+                <motion.div
                   whileHover={{ rotate: 10, scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300 }}
                   className="relative w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors"
@@ -194,7 +193,9 @@ const ContactSection = () => {
                     {item.title}
                   </h4>
                   {item.details.map((detail, idx) => (
-                    <p key={idx} className="text-muted-foreground text-sm">{detail}</p>
+                    <p key={idx} className="text-muted-foreground text-sm">
+                      {detail}
+                    </p>
                   ))}
                 </div>
               </motion.div>
@@ -204,15 +205,11 @@ const ContactSection = () => {
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
+            animate={hasBeenInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-3"
           >
-            <form 
-              onSubmit={handleSubmit} 
-              className="p-8 rounded-2xl bg-background border border-border relative overflow-hidden"
-            >
+            <form onSubmit={handleSubmit} className="p-8 rounded-2xl bg-background border border-border relative overflow-hidden">
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
@@ -227,11 +224,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.name ? "border-destructive" : ""}`}
                   />
                   {errors.name && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-sm mt-1">
                       {errors.name}
                     </motion.p>
                   )}
@@ -250,11 +243,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.email ? "border-destructive" : ""}`}
                   />
                   {errors.email && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-sm mt-1">
                       {errors.email}
                     </motion.p>
                   )}
@@ -275,11 +264,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.phone ? "border-destructive" : ""}`}
                   />
                   {errors.phone && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-sm mt-1">
                       {errors.phone}
                     </motion.p>
                   )}
@@ -297,11 +282,7 @@ const ContactSection = () => {
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.subject ? "border-destructive" : ""}`}
                   />
                   {errors.subject && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-sm mt-1">
                       {errors.subject}
                     </motion.p>
                   )}
@@ -322,26 +303,16 @@ const ContactSection = () => {
                   className={`transition-all duration-300 focus:scale-[1.005] ${errors.message ? "border-destructive" : ""}`}
                 />
                 {errors.message && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-destructive text-sm mt-1"
-                  >
+                  <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-destructive text-sm mt-1">
                     {errors.message}
                   </motion.p>
                 )}
               </div>
 
-              <Button 
-                type="submit" 
-                variant="hero" 
-                size="lg" 
-                className="w-full group relative overflow-hidden" 
-                disabled={isSubmitting}
-              >
+              <Button type="submit" variant="hero" size="lg" className="w-full group relative overflow-hidden" disabled={isSubmitting}>
                 {/* Shimmer effect */}
                 <span className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                
+
                 {isSubmitting ? (
                   <span className="relative flex items-center">
                     <Loader2 className="mr-2 w-5 h-5 animate-spin" />
@@ -350,10 +321,7 @@ const ContactSection = () => {
                 ) : (
                   <span className="relative flex items-center">
                     Send Message
-                    <motion.div
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
+                    <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                       <Send className="ml-2 w-5 h-5" />
                     </motion.div>
                   </span>
