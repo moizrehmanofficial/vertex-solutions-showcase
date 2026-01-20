@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Send, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Send, MapPin, Phone, Mail, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -58,7 +57,6 @@ const ContactSection = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: "" }));
     }
@@ -96,11 +94,49 @@ const ContactSection = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring" as const,
+        stiffness: 100,
+        damping: 15,
+      },
+    },
+  };
+
   return (
     <section id="contact" className="section-padding bg-card relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl" />
+      {/* Animated Background Elements */}
+      <motion.div
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{ 
+          scale: [1.2, 1, 1.2],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl"
+      />
 
       <div className="container mx-auto relative z-10" ref={ref}>
         {/* Header */}
@@ -110,9 +146,17 @@ const ContactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Contact Us</span>
+          <motion.span 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
+          >
+            Contact Us
+          </motion.span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
-            Let's Start a Conversation
+            Let's Start a{" "}
+            <span className="text-gradient text-shadow-glow">Conversation</span>
           </h2>
           <p className="text-muted-foreground text-lg">
             Have a project in mind? We'd love to hear from you. Send us a message 
@@ -123,26 +167,37 @@ const ContactSection = () => {
         <div className="grid lg:grid-cols-5 gap-12">
           {/* Contact Info */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
             className="lg:col-span-2 space-y-6"
           >
             {contactInfo.map((item, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="flex items-start gap-4 p-5 rounded-xl bg-background border border-border"
+                variants={itemVariants}
+                whileHover={{ x: 10, scale: 1.02 }}
+                className="flex items-start gap-4 p-5 rounded-xl bg-background border border-border hover:border-primary/50 transition-all duration-300 group relative overflow-hidden"
               >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                {/* Shimmer effect */}
+                <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                
+                <motion.div 
+                  whileHover={{ rotate: 10, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="relative w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors"
+                >
                   <item.icon className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground mb-1">{item.title}</h4>
+                </motion.div>
+                <div className="relative">
+                  <h4 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                    {item.title}
+                  </h4>
                   {item.details.map((detail, idx) => (
                     <p key={idx} className="text-muted-foreground text-sm">{detail}</p>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
 
@@ -150,12 +205,22 @@ const ContactSection = () => {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.3, type: "spring" }}
             className="lg:col-span-3"
           >
-            <form onSubmit={handleSubmit} className="p-8 rounded-2xl bg-background border border-border">
+            <motion.form 
+              onSubmit={handleSubmit} 
+              className="p-8 rounded-2xl bg-background border border-border relative overflow-hidden"
+            >
+              {/* Form shimmer border */}
+              <div className="absolute inset-0 rounded-2xl border-gradient opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              
               <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.4 }}
+                >
                   <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                     Full Name
                   </label>
@@ -165,11 +230,23 @@ const ContactSection = () => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className={errors.name ? "border-destructive" : ""}
+                    className={`transition-all duration-300 focus:scale-[1.01] ${errors.name ? "border-destructive" : ""}`}
                   />
-                  {errors.name && <p className="text-destructive text-sm mt-1">{errors.name}</p>}
-                </div>
-                <div>
+                  {errors.name && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-destructive text-sm mt-1"
+                    >
+                      {errors.name}
+                    </motion.p>
+                  )}
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.45 }}
+                >
                   <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                     Email Address
                   </label>
@@ -180,14 +257,26 @@ const ContactSection = () => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="john@example.com"
-                    className={errors.email ? "border-destructive" : ""}
+                    className={`transition-all duration-300 focus:scale-[1.01] ${errors.email ? "border-destructive" : ""}`}
                   />
-                  {errors.email && <p className="text-destructive text-sm mt-1">{errors.email}</p>}
-                </div>
+                  {errors.email && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-destructive text-sm mt-1"
+                    >
+                      {errors.email}
+                    </motion.p>
+                  )}
+                </motion.div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.5 }}
+                >
                   <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
                     Phone Number
                   </label>
@@ -197,11 +286,23 @@ const ContactSection = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="+91 XXXXX XXXXX"
-                    className={errors.phone ? "border-destructive" : ""}
+                    className={`transition-all duration-300 focus:scale-[1.01] ${errors.phone ? "border-destructive" : ""}`}
                   />
-                  {errors.phone && <p className="text-destructive text-sm mt-1">{errors.phone}</p>}
-                </div>
-                <div>
+                  {errors.phone && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-destructive text-sm mt-1"
+                    >
+                      {errors.phone}
+                    </motion.p>
+                  )}
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.55 }}
+                >
                   <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
                     Subject
                   </label>
@@ -211,13 +312,26 @@ const ContactSection = () => {
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="How can we help?"
-                    className={errors.subject ? "border-destructive" : ""}
+                    className={`transition-all duration-300 focus:scale-[1.01] ${errors.subject ? "border-destructive" : ""}`}
                   />
-                  {errors.subject && <p className="text-destructive text-sm mt-1">{errors.subject}</p>}
-                </div>
+                  {errors.subject && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-destructive text-sm mt-1"
+                    >
+                      {errors.subject}
+                    </motion.p>
+                  )}
+                </motion.div>
               </div>
 
-              <div className="mb-6">
+              <motion.div 
+                className="mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.6 }}
+              >
                 <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
                   Message
                 </label>
@@ -228,25 +342,53 @@ const ContactSection = () => {
                   onChange={handleChange}
                   placeholder="Tell us about your project or inquiry..."
                   rows={5}
-                  className={errors.message ? "border-destructive" : ""}
+                  className={`transition-all duration-300 focus:scale-[1.005] ${errors.message ? "border-destructive" : ""}`}
                 />
-                {errors.message && <p className="text-destructive text-sm mt-1">{errors.message}</p>}
-              </div>
-
-              <Button type="submit" variant="hero" size="lg" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <span className="animate-spin mr-2">⟳</span>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    Send Message
-                    <Send className="ml-2 w-5 h-5" />
-                  </>
+                {errors.message && (
+                  <motion.p 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-destructive text-sm mt-1"
+                  >
+                    {errors.message}
+                  </motion.p>
                 )}
-              </Button>
-            </form>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.65 }}
+              >
+                <Button 
+                  type="submit" 
+                  variant="hero" 
+                  size="lg" 
+                  className="w-full group relative overflow-hidden" 
+                  disabled={isSubmitting}
+                >
+                  {/* Shimmer effect */}
+                  <span className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                  
+                  {isSubmitting ? (
+                    <span className="relative flex items-center">
+                      <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                      Sending...
+                    </span>
+                  ) : (
+                    <span className="relative flex items-center">
+                      Send Message
+                      <motion.div
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <Send className="ml-2 w-5 h-5" />
+                      </motion.div>
+                    </span>
+                  )}
+                </Button>
+              </motion.div>
+            </motion.form>
           </motion.div>
         </div>
       </div>
