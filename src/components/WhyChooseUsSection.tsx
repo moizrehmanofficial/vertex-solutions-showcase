@@ -192,21 +192,18 @@ const WhyChooseUsSection = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -8, scale: 1.02 }}
               className="group relative"
             >
-              <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500">
+              <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02]">
                 {/* Shimmer overlay on hover */}
                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shimmer-effect pointer-events-none" />
 
                 {/* Icon with gradient background */}
-                <motion.div
-                  whileHover={{ rotate: 5, scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${reason.color} flex items-center justify-center mb-6`}
+                <div
+                  className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${reason.color} flex items-center justify-center mb-6 transition-transform duration-300 group-hover:rotate-[5deg] group-hover:scale-110`}
                 >
                   <reason.icon className="w-8 h-8 text-primary" />
-                </motion.div>
+                </div>
 
                 <h3 className="font-display text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
                   {reason.title}
@@ -214,11 +211,8 @@ const WhyChooseUsSection = () => {
                 <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
 
                 {/* Bottom accent line */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent origin-left"
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
                 />
               </div>
             </motion.div>
