@@ -1,15 +1,14 @@
 import { motion, animate } from "framer-motion";
 import { useEffect, useState } from "react";
-import {
-  Award,
-  HeadphonesIcon,
-  Shield,
-  TrendingUp,
+import { 
+  Award, 
+  HeadphonesIcon, 
+  Shield, 
+  TrendingUp, 
   Users,
   Zap,
-  Globe,
+  Globe
 } from "lucide-react";
-import { useInViewOnce } from "@/hooks/use-in-view-once";
 
 const stats = [
   { value: 500, suffix: "+", label: "Happy Clients" },
@@ -57,36 +56,29 @@ const reasons = [
   },
 ];
 
-const AnimatedCounter = ({
-  value,
-  suffix,
-  start,
-}: {
-  value: number;
-  suffix: string;
-  start: boolean;
-}) => {
+const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  useEffect(() => {
-    if (!start || hasAnimated) return;
-
-    setHasAnimated(true);
-    const controls = animate(0, value, {
-      duration: 2,
-      ease: "easeOut",
-      onUpdate: latest => setDisplayValue(Math.round(latest)),
-    });
-
-    return () => controls.stop();
-  }, [start, hasAnimated, value]);
-
   return (
-    <span className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
+    <motion.span 
+      className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground"
+      onViewportEnter={() => {
+        if (!hasAnimated) {
+          setHasAnimated(true);
+          const controls = animate(0, value, {
+            duration: 2,
+            ease: "easeOut",
+            onUpdate: (latest) => setDisplayValue(Math.round(latest)),
+          });
+          return () => controls.stop();
+        }
+      }}
+      viewport={{ once: true }}
+    >
       {displayValue}
       <span className="text-primary">{suffix}</span>
-    </span>
+    </motion.span>
   );
 };
 
@@ -116,9 +108,6 @@ const itemVariants = {
 };
 
 const WhyChooseUsSection = () => {
-  const { ref: sectionRef, hasBeenInView: sectionVisible } = useInViewOnce<HTMLDivElement>({ margin: "-100px" });
-  const { ref: statsRef, hasBeenInView: statsVisible } = useInViewOnce<HTMLDivElement>({ margin: "-50px" });
-
   return (
     <section id="why-choose-us" className="section-padding relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -126,23 +115,22 @@ const WhyChooseUsSection = () => {
         <div className="absolute top-1/4 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float-delayed" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-border/10 rounded-full animate-spin-slow" />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-border/5 rounded-full animate-spin-slow"
-          style={{ animationDirection: "reverse" }}
-        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-border/5 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }} />
       </div>
 
-      <div ref={sectionRef} className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={sectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <motion.span
+          <motion.span 
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={sectionVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
@@ -153,16 +141,16 @@ const WhyChooseUsSection = () => {
             <span className="text-gradient text-shadow-glow">Priority</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            We combine expertise, innovation, and dedication to deliver exceptional
+            We combine expertise, innovation, and dedication to deliver exceptional 
             value and drive your business towards sustainable growth.
           </p>
         </motion.div>
 
         {/* Animated Stats */}
         <motion.div
-          ref={statsRef}
           initial={{ opacity: 0, y: 40 }}
-          animate={statsVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-20"
         >
@@ -170,13 +158,14 @@ const WhyChooseUsSection = () => {
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
-              animate={statsVisible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 * index }}
               whileHover={{ y: -5 }}
               className="relative group"
             >
               <div className="p-6 lg:p-8 rounded-2xl bg-card border border-border text-center hover:border-primary/50 transition-all duration-500 hover-lift">
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} start={statsVisible} />
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                 <p className="text-muted-foreground mt-2 text-sm lg:text-base">{stat.label}</p>
               </div>
             </motion.div>
@@ -187,7 +176,8 @@ const WhyChooseUsSection = () => {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={sectionVisible ? "visible" : "hidden"}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {reasons.map((reason, index) => (
@@ -200,7 +190,7 @@ const WhyChooseUsSection = () => {
               <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500">
                 {/* Shimmer overlay on hover */}
                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shimmer-effect pointer-events-none" />
-
+                
                 {/* Icon with gradient background */}
                 <motion.div
                   whileHover={{ rotate: 5, scale: 1.1 }}
@@ -213,7 +203,9 @@ const WhyChooseUsSection = () => {
                 <h3 className="font-display text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
                   {reason.title}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
+                <p className="text-muted-foreground leading-relaxed">
+                  {reason.description}
+                </p>
 
                 {/* Bottom accent line */}
                 <motion.div
@@ -230,13 +222,14 @@ const WhyChooseUsSection = () => {
         {/* Trust Badge */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={sectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
           <div className="inline-flex items-center gap-4 px-8 py-4 rounded-full bg-secondary/50 border border-border">
             <div className="flex -space-x-3">
-              {[1, 2, 3, 4].map(i => (
+              {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
                   className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border-2 border-background flex items-center justify-center"

@@ -1,16 +1,15 @@
 import { motion } from "framer-motion";
-import {
-  Calculator,
-  FileCheck,
-  Building2,
-  Briefcase,
-  Laptop,
+import { 
+  Calculator, 
+  FileCheck, 
+  Building2, 
+  Briefcase, 
+  Laptop, 
   Home,
   Receipt,
   Code,
-  Palette,
+  Palette
 } from "lucide-react";
-import { useInViewOnce } from "@/hooks/use-in-view-once";
 
 const services = [
   {
@@ -95,12 +94,10 @@ const itemVariants = {
 };
 
 const ServicesSection = () => {
-  const { ref, hasBeenInView } = useInViewOnce<HTMLDivElement>({ margin: "-100px" });
-
   return (
     <section id="services" className="section-padding relative overflow-hidden">
       {/* Background Gradient with animation */}
-      <motion.div
+      <motion.div 
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -138,17 +135,22 @@ const ServicesSection = () => {
         ))}
       </div>
 
-      <div ref={ref} className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={hasBeenInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+          }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <motion.span
+          <motion.span 
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={hasBeenInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
@@ -159,16 +161,17 @@ const ServicesSection = () => {
             <span className="text-gradient text-shadow-glow">Business Solutions</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            From traditional accounting to cutting-edge technology services, we offer a complete suite
+            From traditional accounting to cutting-edge technology services, we offer a complete suite 
             of solutions tailored to your business needs.
           </p>
         </motion.div>
 
         {/* Services Grid */}
-        <motion.div
+        <motion.div 
           variants={containerVariants}
           initial="hidden"
-          animate={hasBeenInView ? "visible" : "hidden"}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {services.map((service, index) => (
@@ -190,13 +193,13 @@ const ServicesSection = () => {
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 {/* Icon */}
-                <motion.div
+                <motion.div 
                   whileHover={{ rotate: 5, scale: 1.15 }}
                   transition={{ type: "spring", stiffness: 300 }}
                   className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6"
                 >
                   <service.icon className="w-7 h-7 text-primary" />
-
+                  
                   {/* Pulse ring */}
                   <motion.div
                     animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
@@ -209,13 +212,15 @@ const ServicesSection = () => {
                 <h3 className="relative font-display text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
                   {service.title}
                 </h3>
-                <p className="relative text-muted-foreground leading-relaxed">{service.description}</p>
+                <p className="relative text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
 
                 {/* Bottom accent with scale animation */}
-                <motion.div
+                <motion.div 
                   initial={{ scaleX: 0 }}
                   whileHover={{ scaleX: 1 }}
-                  transition={{ duration: 0.4, ease: "easeOut" as const }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                   className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent origin-left"
                 />
               </div>

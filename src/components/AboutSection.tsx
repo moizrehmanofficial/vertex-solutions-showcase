@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Target, Lightbulb, Handshake, ArrowUpRight } from "lucide-react";
-import { useInViewOnce } from "@/hooks/use-in-view-once";
 
 const features = [
   {
@@ -52,18 +51,15 @@ const itemVariants = {
 };
 
 const AboutSection = () => {
-  const { ref, hasBeenInView } = useInViewOnce<HTMLDivElement>({ margin: "-100px" });
-
   return (
     <section id="about" className="section-padding bg-card relative overflow-hidden">
       {/* Animated Background Pattern */}
       <div className="absolute inset-0 opacity-30">
-        <div
-          className="absolute top-0 left-0 w-full h-full"
-          style={{
+        <div className="absolute top-0 left-0 w-full h-full" 
+          style={{ 
             backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--border)) 1px, transparent 0)`,
-            backgroundSize: "40px 40px",
-          }}
+            backgroundSize: '40px 40px'
+          }} 
         />
       </div>
 
@@ -79,26 +75,31 @@ const AboutSection = () => {
         className="absolute bottom-20 left-20 w-24 h-24 bg-primary/5 rounded-full blur-xl hidden lg:block"
       />
 
-      <div ref={ref} className="container mx-auto relative z-10">
+      <div className="container mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={hasBeenInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.6 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
+            }}
           >
-            <motion.span
+            <motion.span 
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={hasBeenInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="inline-block text-primary font-semibold text-sm uppercase tracking-wider px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
             >
               About Us
             </motion.span>
-
-            <motion.h2
+            <motion.h2 
               initial={{ opacity: 0, y: 20 }}
-              animate={hasBeenInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-6 mb-6"
             >
@@ -106,22 +107,23 @@ const AboutSection = () => {
               <span className="text-gradient text-shadow-glow">Excellence</span>{" "}
               Since Day One
             </motion.h2>
-
-            <motion.p
+            <motion.p 
               initial={{ opacity: 0, y: 20 }}
-              animate={hasBeenInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-muted-foreground text-lg leading-relaxed mb-8"
             >
-              <strong className="text-foreground">Vertex Solutions Private Limited</strong> is a premier business consulting firm
-              dedicated to empowering organizations with comprehensive taxation, advisory, and technology solutions.
+              <strong className="text-foreground">Vertex Solutions Private Limited</strong> is a premier business consulting firm 
+              dedicated to empowering organizations with comprehensive taxation, advisory, and technology solutions. 
               Our team of seasoned professionals brings together decades of combined experience across diverse industries.
             </motion.p>
 
-            <motion.div
+            <motion.div 
               variants={containerVariants}
               initial="hidden"
-              animate={hasBeenInView ? "visible" : "hidden"}
+              whileInView="visible"
+              viewport={{ once: true }}
               className="grid grid-cols-2 gap-4 mb-8"
             >
               {highlights.map((item, index) => (
@@ -137,7 +139,9 @@ const AboutSection = () => {
                   >
                     <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
                   </motion.div>
-                  <span className="text-sm text-foreground group-hover:text-primary transition-colors">{item}</span>
+                  <span className="text-sm text-foreground group-hover:text-primary transition-colors">
+                    {item}
+                  </span>
                 </motion.div>
               ))}
             </motion.div>
@@ -146,13 +150,17 @@ const AboutSection = () => {
             <motion.a
               href="#services"
               initial={{ opacity: 0, y: 20 }}
-              animate={hasBeenInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
               whileHover={{ x: 5 }}
               className="inline-flex items-center gap-2 text-primary font-semibold group"
             >
               Explore Our Services
-              <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+              <motion.div
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </motion.div>
             </motion.a>
@@ -160,31 +168,39 @@ const AboutSection = () => {
 
           {/* Right Content - Feature Cards */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={hasBeenInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0, x: 50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.2 } },
+            }}
             className="space-y-6"
           >
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30, x: 30 }}
-                animate={hasBeenInView ? { opacity: 1, y: 0, x: 0 } : { opacity: 0, y: 30, x: 30 }}
-                transition={{ duration: 0.5, delay: 0.3 + index * 0.15 }}
+                whileInView={{ opacity: 1, y: 0, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.5, 
+                  delay: 0.3 + index * 0.15,
+                }}
                 whileHover={{ x: 10, scale: 1.02 }}
                 className="group p-6 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden"
               >
                 {/* Shimmer overlay */}
                 <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
+                
                 <div className="flex items-start gap-5 relative">
-                  <motion.div
+                  <motion.div 
                     whileHover={{ rotate: 10, scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 300 }}
                     className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors relative"
                   >
                     <feature.icon className="w-7 h-7 text-primary" />
-
+                    
                     {/* Pulse effect */}
                     <motion.div
                       animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }}
