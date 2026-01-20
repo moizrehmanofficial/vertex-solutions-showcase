@@ -14,37 +14,37 @@ const reasons = [
     icon: Award,
     title: "Industry Expertise",
     description: "Our team consists of certified professionals with deep industry knowledge and credentials.",
-    color: "from-primary/5 to-primary/5",
+    color: "from-primary/20 to-primary/5",
   },
   {
     icon: HeadphonesIcon,
     title: "24/7 Support",
     description: "Round-the-clock dedicated support to address your queries and concerns promptly.",
-    color: "from-blue-500/5 to-blue-500/5",
+    color: "from-blue-500/20 to-blue-500/5",
   },
   {
     icon: Shield,
     title: "100% Confidential",
     description: "Your data and business information are protected with enterprise-grade security.",
-    color: "from-purple-500/5 to-purple-500/5",
+    color: "from-purple-500/20 to-purple-500/5",
   },
   {
     icon: TrendingUp,
     title: "Proven Results",
     description: "Track record of delivering measurable outcomes and business growth for our clients.",
-    color: "from-amber-500/5 to-amber-500/5",
+    color: "from-amber-500/20 to-amber-500/5",
   },
   {
     icon: Zap,
     title: "Fast Turnaround",
     description: "Efficient processes ensure quick delivery without compromising on quality.",
-    color: "from-red-500/5 to-red-500/5",
+    color: "from-red-500/20 to-red-500/5",
   },
   {
     icon: Globe,
     title: "Global Standards",
     description: "We follow international best practices and compliance standards in all our services.",
-    color: "from-teal-500/5 to-teal-500/5",
+    color: "from-teal-500/20 to-teal-500/5",
   },
 ];
 
