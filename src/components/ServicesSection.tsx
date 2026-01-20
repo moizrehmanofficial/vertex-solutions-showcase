@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { 
   Calculator, 
   FileCheck, 
@@ -94,8 +95,20 @@ const itemVariants = {
 };
 
 const ServicesSection = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { margin: "-50px", amount: 0.1 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [isInView, controls]);
+
   return (
-    <section id="services" className="section-padding relative overflow-hidden">
+    <section id="services" ref={sectionRef} className="section-padding relative overflow-hidden">
       {/* Background Gradient with animation */}
       <motion.div 
         animate={{
@@ -139,8 +152,7 @@ const ServicesSection = () => {
         {/* Header */}
         <motion.div
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, margin: "-100px" }}
+          animate={controls}
           variants={{
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -148,10 +160,10 @@ const ServicesSection = () => {
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <motion.span 
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: false }}
-            transition={{ duration: 0.5 }}
+            variants={{
+              hidden: { opacity: 0, scale: 0.8 },
+              visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+            }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
             Our Services
@@ -170,8 +182,7 @@ const ServicesSection = () => {
         <motion.div 
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, margin: "-50px" }}
+          animate={controls}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {services.map((service, index) => (
