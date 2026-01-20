@@ -285,7 +285,7 @@ const ContactSection = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="+91 XXXXX XXXXX"
+                    placeholder="+92 XXXXX XXXXX"
                     className={`transition-all duration-300 focus:scale-[1.01] ${errors.phone ? "border-destructive" : ""}`}
                   />
                   {errors.phone && (
