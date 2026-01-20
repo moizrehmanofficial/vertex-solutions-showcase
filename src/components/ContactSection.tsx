@@ -1,17 +1,37 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { Send, MapPin, Phone, Mail, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+
+const services = [
+  "Accounting & ERP Solutions",
+  "Audit & Assurance",
+  "Corporate & Legal Advisory",
+  "Finance & CFO Services",
+  "IT-Enabled Business Solutions",
+  "Property & Registration",
+  "Taxation & Advisory",
+  "Full-Stack Web Development",
+  "Graphic Design & Branding",
+  "Other",
+];
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
   email: z.string().email("Please enter a valid email"),
   phone: z.string().min(10, "Please enter a valid phone number").max(15),
-  subject: z.string().min(5, "Subject must be at least 5 characters").max(200),
+  subject: z.string().min(1, "Please select a service"),
   message: z.string().min(10, "Message must be at least 10 characters").max(1000),
 });
 
@@ -62,9 +82,9 @@ const itemVariants = {
   },
 };
 
-const ContactSection = () => {
+const ContactSection = forwardRef<HTMLElement>((_, ref) => {
   const { toast } = useToast();
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { margin: "-50px", amount: 0.1 });
   const controls = useAnimation();
 
@@ -91,6 +111,13 @@ const ContactSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleSubjectChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, subject: value }));
+    if (errors.subject) {
+      setErrors((prev) => ({ ...prev, subject: "" }));
     }
   };
 
@@ -300,16 +327,22 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
-                    Subject
+                    Service Required
                   </label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    placeholder="How can we help?"
-                    className={`transition-all duration-300 focus:scale-[1.01] ${errors.subject ? "border-destructive" : ""}`}
-                  />
+                  <Select value={formData.subject} onValueChange={handleSubjectChange}>
+                    <SelectTrigger
+                      className={`transition-all duration-300 bg-background ${errors.subject ? "border-destructive" : ""}`}
+                    >
+                      <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border border-border z-50">
+                      {services.map((service) => (
+                        <SelectItem key={service} value={service}>
+                          {service}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.subject && (
                     <motion.p
                       initial={{ opacity: 0, y: -10 }}
@@ -376,6 +409,8 @@ const ContactSection = () => {
       </div>
     </section>
   );
-};
+});
+
+ContactSection.displayName = "ContactSection";
 
 export default ContactSection;
