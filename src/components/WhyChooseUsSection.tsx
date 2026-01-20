@@ -1,14 +1,6 @@
 import { motion, animate, useAnimation, useInView } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
-import { 
-  Award, 
-  HeadphonesIcon, 
-  Shield, 
-  TrendingUp, 
-  Users,
-  Zap,
-  Globe
-} from "lucide-react";
+import { Award, HeadphonesIcon, Shield, TrendingUp, Users, Zap, Globe } from "lucide-react";
 
 const stats = [
   { value: 500, suffix: "+", label: "Happy Clients" },
@@ -22,37 +14,37 @@ const reasons = [
     icon: Award,
     title: "Industry Expertise",
     description: "Our team consists of certified professionals with deep industry knowledge and credentials.",
-    color: "from-primary/20 to-primary/5",
+    color: "from-primary/5 to-primary/5",
   },
   {
     icon: HeadphonesIcon,
     title: "24/7 Support",
     description: "Round-the-clock dedicated support to address your queries and concerns promptly.",
-    color: "from-blue-500/20 to-blue-500/5",
+    color: "from-blue-500/5 to-blue-500/5",
   },
   {
     icon: Shield,
     title: "100% Confidential",
     description: "Your data and business information are protected with enterprise-grade security.",
-    color: "from-purple-500/20 to-purple-500/5",
+    color: "from-purple-500/5 to-purple-500/5",
   },
   {
     icon: TrendingUp,
     title: "Proven Results",
     description: "Track record of delivering measurable outcomes and business growth for our clients.",
-    color: "from-amber-500/20 to-amber-500/5",
+    color: "from-amber-500/5 to-amber-500/5",
   },
   {
     icon: Zap,
     title: "Fast Turnaround",
     description: "Efficient processes ensure quick delivery without compromising on quality.",
-    color: "from-red-500/20 to-red-500/5",
+    color: "from-red-500/5 to-red-500/5",
   },
   {
     icon: Globe,
     title: "Global Standards",
     description: "We follow international best practices and compliance standards in all our services.",
-    color: "from-teal-500/20 to-teal-500/5",
+    color: "from-teal-500/5 to-teal-500/5",
   },
 ];
 
@@ -126,7 +118,10 @@ const WhyChooseUsSection = () => {
         <div className="absolute top-1/4 -left-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-float-delayed" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-border/10 rounded-full animate-spin-slow" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-border/5 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }} />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-border/5 rounded-full animate-spin-slow"
+          style={{ animationDirection: "reverse" }}
+        />
       </div>
 
       <div className="container mx-auto relative z-10">
@@ -140,7 +135,7 @@ const WhyChooseUsSection = () => {
           }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <motion.span 
+          <motion.span
             variants={{
               hidden: { opacity: 0, scale: 0.8 },
               visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
@@ -150,12 +145,11 @@ const WhyChooseUsSection = () => {
             Why Choose Us
           </motion.span>
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
-            Your Success Is Our{" "}
-            <span className="text-gradient text-shadow-glow">Priority</span>
+            Your Success Is Our <span className="text-gradient text-shadow-glow">Priority</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            We combine expertise, innovation, and dedication to deliver exceptional 
-            value and drive your business towards sustainable growth.
+            We combine expertise, innovation, and dedication to deliver exceptional value and drive your business
+            towards sustainable growth.
           </p>
         </motion.div>
 
@@ -198,13 +192,13 @@ const WhyChooseUsSection = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.2 } }}
+              whileHover={{ y: -8, scale: 1.02 }}
               className="group relative"
             >
               <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500">
                 {/* Shimmer overlay on hover */}
                 <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shimmer-effect pointer-events-none" />
-                
+
                 {/* Icon with gradient background */}
                 <motion.div
                   whileHover={{ rotate: 5, scale: 1.1 }}
@@ -217,9 +211,7 @@ const WhyChooseUsSection = () => {
                 <h3 className="font-display text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
                   {reason.title}
                 </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {reason.description}
-                </p>
+                <p className="text-muted-foreground leading-relaxed">{reason.description}</p>
 
                 {/* Bottom accent line */}
                 <motion.div
