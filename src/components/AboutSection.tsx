@@ -81,7 +81,7 @@ const AboutSection = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0, transition: { duration: 0.6 } },
@@ -90,7 +90,7 @@ const AboutSection = () => {
             <motion.span 
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5 }}
               className="inline-block text-primary font-semibold text-sm uppercase tracking-wider px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
             >
@@ -99,7 +99,7 @@ const AboutSection = () => {
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-display text-3xl md:text-4xl lg:text-5xl font-bold mt-6 mb-6"
             >
@@ -110,7 +110,7 @@ const AboutSection = () => {
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-muted-foreground text-lg leading-relaxed mb-8"
             >
@@ -123,7 +123,7 @@ const AboutSection = () => {
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               className="grid grid-cols-2 gap-4 mb-8"
             >
               {highlights.map((item, index) => (
@@ -151,7 +151,7 @@ const AboutSection = () => {
               href="#services"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.5 }}
               whileHover={{ x: 5 }}
               className="inline-flex items-center gap-2 text-primary font-semibold group"
@@ -170,7 +170,7 @@ const AboutSection = () => {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: false, margin: "-100px" }}
             variants={{
               hidden: { opacity: 0, x: 50 },
               visible: { opacity: 1, x: 0, transition: { duration: 0.6, delay: 0.2 } },
@@ -182,7 +182,7 @@ const AboutSection = () => {
                 key={index}
                 initial={{ opacity: 0, y: 30, x: 30 }}
                 whileInView={{ opacity: 1, y: 0, x: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ 
                   duration: 0.5, 
                   delay: 0.3 + index * 0.15,

@@ -74,7 +74,7 @@ const AnimatedCounter = ({ value, suffix }: { value: number; suffix: string }) =
           return () => controls.stop();
         }
       }}
-      viewport={{ once: true }}
+      viewport={{ once: false }}
     >
       {displayValue}
       <span className="text-primary">{suffix}</span>
@@ -123,14 +123,14 @@ const WhyChooseUsSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <motion.span 
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             transition={{ duration: 0.5 }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
@@ -150,7 +150,7 @@ const WhyChooseUsSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-20"
         >
@@ -159,7 +159,7 @@ const WhyChooseUsSection = () => {
               key={index}
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5, delay: 0.1 * index }}
               whileHover={{ y: -5 }}
               className="relative group"
@@ -177,7 +177,7 @@ const WhyChooseUsSection = () => {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: false, margin: "-50px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {reasons.map((reason, index) => (
@@ -223,7 +223,7 @@ const WhyChooseUsSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 text-center"
         >
