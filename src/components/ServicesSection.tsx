@@ -189,7 +189,7 @@ const ServicesSection = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -10, scale: 1.02 }}
+              whileHover={{ y: -10, scale: 1.02, transition: { duration: 0.2 } }}
               className="group relative"
             >
               <div className="h-full p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 overflow-hidden">

@@ -197,7 +197,7 @@ const AboutSection = () => {
                     transition: { duration: 0.5, delay: 0.3 + index * 0.15 }
                   },
                 }}
-                whileHover={{ x: 10, scale: 1.02 }}
+                whileHover={{ x: 10, scale: 1.02, transition: { duration: 0.2 } }}
                 className="group p-6 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 relative overflow-hidden"
               >
                 {/* Shimmer overlay */}
