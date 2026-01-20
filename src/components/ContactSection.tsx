@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Send, MapPin, Phone, Mail, Clock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,9 +38,31 @@ const contactInfo = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+};
+
 const ContactSection = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -94,30 +115,6 @@ const ContactSection = () => {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 100,
-        damping: 15,
-      },
-    },
-  };
-
   return (
     <section id="contact" className="section-padding bg-card relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -138,17 +135,19 @@ const ContactSection = () => {
         className="absolute bottom-0 left-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl"
       />
 
-      <div className="container mx-auto relative z-10" ref={ref}>
+      <div className="container mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <motion.span 
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-4 px-4 py-2 rounded-full bg-primary/10 border border-primary/20"
           >
@@ -169,7 +168,8 @@ const ContactSection = () => {
           <motion.div
             variants={containerVariants}
             initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
             className="lg:col-span-2 space-y-6"
           >
             {contactInfo.map((item, index) => (
@@ -204,23 +204,17 @@ const ContactSection = () => {
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3, type: "spring" }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-3"
           >
-            <motion.form 
+            <form 
               onSubmit={handleSubmit} 
               className="p-8 rounded-2xl bg-background border border-border relative overflow-hidden"
             >
-              {/* Form shimmer border */}
-              <div className="absolute inset-0 rounded-2xl border-gradient opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              
               <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.4 }}
-                >
+                <div>
                   <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                     Full Name
                   </label>
@@ -241,12 +235,8 @@ const ContactSection = () => {
                       {errors.name}
                     </motion.p>
                   )}
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.45 }}
-                >
+                </div>
+                <div>
                   <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                     Email Address
                   </label>
@@ -268,15 +258,11 @@ const ContactSection = () => {
                       {errors.email}
                     </motion.p>
                   )}
-                </motion.div>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.5 }}
-                >
+                <div>
                   <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
                     Phone Number
                   </label>
@@ -297,12 +283,8 @@ const ContactSection = () => {
                       {errors.phone}
                     </motion.p>
                   )}
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.55 }}
-                >
+                </div>
+                <div>
                   <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
                     Subject
                   </label>
@@ -323,15 +305,10 @@ const ContactSection = () => {
                       {errors.subject}
                     </motion.p>
                   )}
-                </motion.div>
+                </div>
               </div>
 
-              <motion.div 
-                className="mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.6 }}
-              >
+              <div className="mb-6">
                 <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
                   Message
                 </label>
@@ -353,42 +330,36 @@ const ContactSection = () => {
                     {errors.message}
                   </motion.p>
                 )}
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.65 }}
+              <Button 
+                type="submit" 
+                variant="hero" 
+                size="lg" 
+                className="w-full group relative overflow-hidden" 
+                disabled={isSubmitting}
               >
-                <Button 
-                  type="submit" 
-                  variant="hero" 
-                  size="lg" 
-                  className="w-full group relative overflow-hidden" 
-                  disabled={isSubmitting}
-                >
-                  {/* Shimmer effect */}
-                  <span className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                  
-                  {isSubmitting ? (
-                    <span className="relative flex items-center">
-                      <Loader2 className="mr-2 w-5 h-5 animate-spin" />
-                      Sending...
-                    </span>
-                  ) : (
-                    <span className="relative flex items-center">
-                      Send Message
-                      <motion.div
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        <Send className="ml-2 w-5 h-5" />
-                      </motion.div>
-                    </span>
-                  )}
-                </Button>
-              </motion.div>
-            </motion.form>
+                {/* Shimmer effect */}
+                <span className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                
+                {isSubmitting ? (
+                  <span className="relative flex items-center">
+                    <Loader2 className="mr-2 w-5 h-5 animate-spin" />
+                    Sending...
+                  </span>
+                ) : (
+                  <span className="relative flex items-center">
+                    Send Message
+                    <motion.div
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <Send className="ml-2 w-5 h-5" />
+                    </motion.div>
+                  </span>
+                )}
+              </Button>
+            </form>
           </motion.div>
         </div>
       </div>
