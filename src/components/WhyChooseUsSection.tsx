@@ -170,10 +170,9 @@ const WhyChooseUsSection = () => {
                 hidden: { opacity: 0, y: 30, scale: 0.9 },
                 visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, delay: 0.1 * index } },
               }}
-              whileHover={{ y: -5 }}
               className="relative group"
             >
-              <div className="p-6 lg:p-8 rounded-2xl bg-card border border-border text-center hover:border-primary/50 transition-all duration-500 hover-lift">
+              <div className="p-6 lg:p-8 rounded-2xl bg-card border border-border text-center hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10">
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} isInView={isInView} />
                 <p className="text-muted-foreground mt-2 text-sm lg:text-base">{stat.label}</p>
               </div>
